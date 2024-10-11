@@ -7,3 +7,6 @@ description.workspace = true
 documentation.workspace = true
 
 [dependencies]
+rocket = { version = "0.5.1", features = ["json"] }
+lazy_static = "1.5.0"
+log = "0.4.22"
