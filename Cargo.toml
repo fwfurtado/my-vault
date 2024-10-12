@@ -1,5 +1,5 @@
 [workspace]
-members = ["http", "database", "core"]
+members = ["http", "database", "core", "support"]
 resolver = "2"
 
 [workspace.package]
@@ -7,3 +7,7 @@ version = "0.1.0"
 authors = ["Mimi"]
 description = "Vault system SAAS"
 documentation = "https://example.com/bar"
+
+
+[workspace.dependencies]
+rstest = "0.23.0"

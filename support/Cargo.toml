@@ -1,0 +1,12 @@
+[package]
+name = "support"
+edition = "2021"
+version.workspace = true
+authors.workspace = true
+description.workspace = true
+documentation.workspace = true
+
+[dependencies]
+config = "0.14.0"
+serde = { version = "1.0.210", features = ["derive"] }
+rstest.workspace = true
