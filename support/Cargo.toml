@@ -9,4 +9,6 @@ documentation.workspace = true
 [dependencies]
 config = "0.14.0"
 serde = { version = "1.0.210", features = ["derive"] }
+
+[dev-dependencies]
 rstest.workspace = true
