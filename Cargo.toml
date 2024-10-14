@@ -11,3 +11,6 @@ documentation = "https://example.com/bar"
 
 [workspace.dependencies]
 rstest = "0.23.0"
+mockall = "0.13.0"
+mockall_double = "0.3.1"
+fake = { version = "2.10.0", features = ["derive"] }

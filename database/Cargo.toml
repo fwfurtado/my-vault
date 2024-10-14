@@ -7,3 +7,8 @@ description.workspace = true
 documentation.workspace = true
 
 [dependencies]
+support = { path = "../support" }
+mockall.workspace = true
+
+[dev-dependencies]
+rstest.workspace = true

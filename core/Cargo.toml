@@ -7,8 +7,13 @@ description.workspace = true
 documentation.workspace = true
 
 [dependencies]
+cuid = "1.3.3"
 support = { path = "../support" }
+database = { path = "../database" }
 
 
 [dev-dependencies]
 rstest.workspace = true
+mockall.workspace = true
+mockall_double.workspace = true
+fake.workspace = true

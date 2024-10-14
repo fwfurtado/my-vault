@@ -1,30 +1,51 @@
-use std::sync::atomic::AtomicI32;
-
-static IDENTITY: AtomicI32 = AtomicI32::new(0);
-
 #[derive(Debug, Clone)]
 pub struct User {
-    id: i32,
+    id: Option<i32>,
     username: String,
 }
 
+impl From<database::entities::UserId> for User {
+    fn from(user_id: database::entities::UserId) -> Self {
+        User {
+            id: Some(user_id),
+            username: String::new(), //TODO: Not implemented yet. This will be hard to implement cause we don't have a way to get the username from the database at this point.
+        }
+    }
+}
+
+impl From<database::entities::User> for User {
+    fn from(user: database::entities::User) -> Self {
+        User {
+            id: Some(user.id()),
+            username: user.name().to_string(),
+        }
+    }
+}
+
+impl Default for User {
+    fn default() -> Self {
+        User {
+            id: None,
+            username: "".to_string(),
+        }
+    }
+}
+
+impl Into<database::entities::User> for User {
+    fn into(self) -> database::entities::User {
+        database::entities::User::new(self.id.unwrap_or(0), self.username)
+    }
+}
+
 impl User {
-    pub fn identity(username: String) -> Self {
-        let id = IDENTITY.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
+    pub fn new(username: String) -> Self {
         User {
-            id,
+            id: None,
             username,
         }
     }
 
-    pub fn new(id: i32, username: String) -> Self {
-        User {
-            id,
-            username,
-        }
-    }
-
-    pub fn id(&self) -> i32 {
+    pub fn id(&self) -> Option<i32> {
         self.id
     }
 

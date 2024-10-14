@@ -1,6 +1,6 @@
 use rocket::Responder;
 
-pub mod items;
+pub mod secrets;
 pub mod users;
 
 

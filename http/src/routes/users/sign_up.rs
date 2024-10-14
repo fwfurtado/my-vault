@@ -37,7 +37,7 @@ pub fn endpoint(new_user: Json<SignUpRequest>, use_case: &State<Arc<SignUp>>) ->
     match use_case.execute(new_user.username.clone()) {
         Ok(user) => Ok(
             SignUpResponseBody {
-                id: user.id(),
+                id: user.id().unwrap(),
                 username: user.username().clone(),
             }.into()
         ),
