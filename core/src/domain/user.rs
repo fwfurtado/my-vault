@@ -22,6 +22,12 @@ impl From<database::entities::User> for User {
     }
 }
 
+impl Into<database::entities::User> for User {
+    fn into(self) -> database::entities::User {
+        database::entities::User::new(self.id.unwrap_or(0), self.username)
+    }
+}
+
 impl Default for User {
     fn default() -> Self {
         User {
@@ -31,18 +37,16 @@ impl Default for User {
     }
 }
 
-impl Into<database::entities::User> for User {
-    fn into(self) -> database::entities::User {
-        database::entities::User::new(self.id.unwrap_or(0), self.username)
-    }
-}
-
 impl User {
-    pub fn new(username: String) -> Self {
+    pub fn with(id: u16, username: String) -> Self {
         User {
-            id: None,
+            id: Some(id.into()),
             username,
         }
+    }
+
+    pub fn new(username: String) -> Self {
+        User { id: None, username }
     }
 
     pub fn id(&self) -> Option<i32> {

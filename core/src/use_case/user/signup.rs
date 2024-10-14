@@ -9,12 +9,8 @@ pub struct SignUp {
     keys_gateway: Arc<dyn KeyGateway>,
 }
 
-
 impl SignUp {
-    pub fn new(
-        user_gateway: Arc<dyn UserGateway>,
-        keys_gateway: Arc<dyn KeyGateway>,
-    ) -> Self {
+    pub fn new(user_gateway: Arc<dyn UserGateway>, keys_gateway: Arc<dyn KeyGateway>) -> Self {
         SignUp {
             user_gateway,
             keys_gateway,
@@ -26,7 +22,6 @@ impl SignUp {
             Some(_) => return Err(UserError::AlreadyExists("User already exists".to_string())),
             None => User::new(name),
         };
-
 
         let user = self.user_gateway.save(&user);
 
@@ -41,7 +36,6 @@ impl SignUp {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use database::repository::{KeyRepository, UserRepository};
     use mockall::mock;
 
     mock! {
@@ -61,30 +55,26 @@ mod tests {
         }
     }
 
-
-
     #[test]
     fn should_create_user() {
         let mut mock_user_gateway = MockUserGatewayTesting::new();
 
-        mock_user_gateway.expect_find_by_username()
+        mock_user_gateway
+            .expect_find_by_username()
             .times(1)
             .return_const(None);
 
-        mock_user_gateway.expect_save()
+        mock_user_gateway
+            .expect_save()
             .times(1)
             .returning(|user| user.clone());
 
-
         let mut mock_key_gateway = MockKeyGatewayTesting::new();
 
-        mock_key_gateway.expect_save()
-            .times(1)
-            .return_const(());
+        mock_key_gateway.expect_save().times(1).return_const(());
 
         let user_gateway = Arc::new(mock_user_gateway);
         let key_gateway = Arc::new(mock_key_gateway);
-
 
         let signup = SignUp::new(user_gateway, key_gateway);
         let user = signup.execute("user".to_string()).expect("valid user");

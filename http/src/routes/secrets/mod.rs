@@ -5,7 +5,7 @@ mod create;
 mod show;
 
 pub fn stage() -> AdHoc {
-    AdHoc::on_ignite("Items State", |rocket| async {
-        rocket.mount("/secrets", routes![create::new_item, show::get_item])
+    AdHoc::on_ignite("Secret Routes", |rocket| async {
+        rocket.mount("/secrets", routes![create::create_secret, show::get_item])
     })
 }

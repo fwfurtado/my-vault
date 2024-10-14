@@ -9,7 +9,7 @@ pub trait KeyGateway: Send + Sync {
 
 pub fn new_key_gateway(key_repository: Arc<dyn KeyRepository>) -> impl KeyGateway {
     DefaultKeyGateway {
-        key_repository: Arc::clone(&key_repository)
+        key_repository: Arc::clone(&key_repository),
     }
 }
 
@@ -19,11 +19,14 @@ struct DefaultKeyGateway {
 
 impl KeyGateway for DefaultKeyGateway {
     fn save(&self, key: &Key) {
-        self.key_repository.save(key.clone().into());
+        self.key_repository
+            .save(key.owned_by().clone().into(), key.clone().into());
     }
 
     fn find_by_username(&self, username: String) -> Option<Key> {
-        self.key_repository.find_by_username(username.clone()).map(Key::from)
+        self.key_repository
+            .find_by_username(username.clone())
+            .map(Key::from)
     }
 }
 
@@ -32,35 +35,32 @@ mod tests {
     use super::*;
     use crate::domain::User;
     use database::repository::KeyRepository;
-    use fake::faker::internet::raw::UserAgent;
-    use fake::locales::EN;
-    use fake::Fake;
+    use fake::faker::internet::en::{Password, Username};
+    use fake::{Fake, Faker};
     use mockall::mock;
     use rstest::rstest;
 
     mock! {
         KeyRepositoryTesting{}
         impl KeyRepository for KeyRepositoryTesting {
-            fn save(&self, key: database::entities::Key) -> i32;
+            fn save(&self, user: database::entities::User, key: database::entities::Key) -> i32;
             fn find_by_username(&self, username: String) -> Option<database::entities::Key>;
             fn find_all_by_user_id(&self, user_id: database::entities::UserId) -> Option<Vec<database::entities::Key>>;
 
         }
     }
 
-
     #[rstest]
     fn should_save_key() {
         let mut repository_mock = MockKeyRepositoryTesting::new();
 
-        repository_mock.expect_save()
-            .times(1)
-            .return_const(0);
+        repository_mock.expect_save().times(1).return_const(0);
 
-        let key = cuid::cuid2_slug();
-        let username = UserAgent(EN).fake();
+        let key = Password(16..32).fake();
+        let username = Username().fake();
+        let user_id: u16 = Faker.fake();
 
-        let user = User::new(username);
+        let user = User::with(user_id, username);
 
         let gateway = new_key_gateway(Arc::new(repository_mock));
 

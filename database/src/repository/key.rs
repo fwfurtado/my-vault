@@ -1,13 +1,12 @@
 use crate::entities::key::Key;
-use crate::entities::UserId;
+use crate::entities::{User, UserId};
 use std::collections::HashMap;
 use std::sync::{Arc, RwLock};
 use support::auto_increment;
 use support::auto_increment::Identity;
 
-
 pub trait KeyRepository: Send + Sync {
-    fn save(&self, key: Key) -> i32;
+    fn save(&self, user: User, key: Key) -> i32;
     fn find_all_by_user_id(&self, user_id: UserId) -> Option<Vec<Key>>;
     fn find_by_username(&self, username: String) -> Option<Key>;
 }
@@ -27,7 +26,7 @@ struct DefaultKeyRepository {
 }
 
 impl KeyRepository for DefaultKeyRepository {
-    fn save(&self, key: Key) -> i32 {
+    fn save(&self, user: User, key: Key) -> i32 {
         let key = match key.id() {
             0 => {
                 let id = self.identity.next();
@@ -43,7 +42,7 @@ impl KeyRepository for DefaultKeyRepository {
         let keys = table.entry(*user_id).or_insert(Vec::new());
         keys.push(key.clone());
 
-        username_index.insert(key.secret().clone(), key.clone());
+        username_index.insert(user.name().clone(), key.clone());
 
         key.id()
     }

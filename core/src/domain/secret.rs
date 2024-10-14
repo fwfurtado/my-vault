@@ -1,6 +1,5 @@
 use crate::domain::Key;
 
-
 #[derive(Clone)]
 pub struct Secret {
     id: Option<i32>,
@@ -21,6 +20,17 @@ impl Into<database::entities::Secret> for Secret {
 }
 
 impl Secret {
+    pub fn plain_text(url: String, text: String, key: Key) -> Self {
+        let encode = key.encode(text);
+
+        Secret {
+            id: None,
+            url,
+            value: encode,
+            key,
+        }
+    }
+
     pub fn new(url: String, value: String, key: Key) -> Self {
         Secret {
             id: None,

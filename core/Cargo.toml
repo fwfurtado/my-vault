@@ -17,3 +17,5 @@ rstest.workspace = true
 mockall.workspace = true
 mockall_double.workspace = true
 fake.workspace = true
+url.workspace = true
+rand.workspace = true

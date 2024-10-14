@@ -1,13 +1,25 @@
 use crate::gateway::secret::SecretGateway;
+use crate::gateway::KeyGateway;
 use std::sync::Arc;
 
 mod create;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum SecretError {
     NotFoundUrl,
+    UserNotFound,
 }
 
-pub struct SecretsUseCase {
+pub struct SecretUseCase {
     secret_gateway: Arc<dyn SecretGateway>,
+    key_gateway: Arc<dyn KeyGateway>,
+}
+
+impl SecretUseCase {
+    pub fn new(secret_gateway: Arc<dyn SecretGateway>, key_gateway: Arc<dyn KeyGateway>) -> Self {
+        SecretUseCase {
+            secret_gateway: Arc::clone(&secret_gateway),
+            key_gateway: Arc::clone(&key_gateway),
+        }
+    }
 }

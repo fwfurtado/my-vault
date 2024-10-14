@@ -3,7 +3,7 @@ use database::repository::SecretRepository;
 use std::sync::Arc;
 
 pub trait SecretGateway: Send + Sync {
-    fn save(&self, secret: &Secret);
+    fn save(&self, secret: &Secret) -> i32;
 }
 
 pub fn new_secret_gateway(secret_repository: Arc<dyn SecretRepository>) -> impl SecretGateway {
@@ -12,13 +12,12 @@ pub fn new_secret_gateway(secret_repository: Arc<dyn SecretRepository>) -> impl 
     }
 }
 
-
 struct DefaultSecretGateway {
     secret_repository: Arc<dyn SecretRepository>,
 }
 
 impl SecretGateway for DefaultSecretGateway {
-    fn save(&self, secret: &Secret) {
-        self.secret_repository.save(secret.clone().into());
+    fn save(&self, secret: &Secret) -> i32 {
+        self.secret_repository.save(secret.clone().into())
     }
 }

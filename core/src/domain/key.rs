@@ -1,7 +1,4 @@
 use crate::domain::User;
-use std::sync::atomic::AtomicI32;
-
-static IDENTITY: AtomicI32 = AtomicI32::new(0);
 
 #[derive(Clone)]
 pub struct Key {
@@ -29,7 +26,6 @@ impl Into<database::entities::Key> for Key {
         )
     }
 }
-
 
 impl Into<database::entities::KeyId> for Key {
     fn into(self) -> database::entities::KeyId {
@@ -71,9 +67,8 @@ impl Key {
     }
 
     pub fn decode(&self, text: String) -> Option<String> {
-        text.strip_prefix(
-            format!("{}:", &self.encrypted_value).as_str()
-        ).map(|s| s.to_string())
+        text.strip_prefix(format!("{}:", &self.encrypted_value).as_str())
+            .map(|s| s.to_string())
     }
 }
 
