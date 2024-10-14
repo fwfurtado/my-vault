@@ -1,11 +1,9 @@
-#[macro_use]
-extern crate rocket;
+use http::make_rocket_server;
 
-
-mod routes;
-
-
-#[launch]
-fn rocket() -> _ {
-    routes::register(rocket::build())
+#[rocket::main]
+async fn main() {
+    make_rocket_server()
+        .launch()
+        .await
+        .expect("valid rocket server");
 }

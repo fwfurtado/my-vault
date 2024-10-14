@@ -1,8 +1,11 @@
-use rocket::{Build, Rocket};
+use rocket::Responder;
 
-mod items;
+pub mod items;
+pub mod users;
 
 
-pub fn register(builder: Rocket<Build>) -> Rocket<Build> {
-    items::register(builder)
+#[derive(Responder, Debug)]
+pub enum RouteError {
+    #[response(status = 409, content_type = "json")]
+    Conflict(String),
 }

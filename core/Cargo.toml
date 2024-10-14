@@ -7,6 +7,7 @@ description.workspace = true
 documentation.workspace = true
 
 [dependencies]
+support = { path = "../support" }
 
 
 [dev-dependencies]
