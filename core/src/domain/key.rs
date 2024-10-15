@@ -1,6 +1,6 @@
 use crate::domain::User;
 
-#[derive(Clone)]
+#[derive(PartialEq, Debug, Clone)]
 pub struct Key {
     id: Option<i32>,
     encrypted_value: String,
@@ -13,6 +13,16 @@ impl From<database::entities::Key> for Key {
             id: Some(key.id()),
             encrypted_value: key.secret().to_string(),
             owned_by: User::from(key.owned_by().clone()),
+        }
+    }
+}
+
+impl From<database::entities::KeyId> for Key {
+    fn from(key_id: database::entities::KeyId) -> Self {
+        Key {
+            id: Some(key_id),
+            encrypted_value: String::new(),
+            owned_by: User::default(),
         }
     }
 }

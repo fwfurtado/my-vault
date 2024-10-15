@@ -43,6 +43,7 @@ mod tests {
         SecretGatewayTesting {}
         impl SecretGateway for SecretGatewayTesting {
             fn save(&self, secret: &Secret) -> i32;
+            fn find_by_url(&self, url: String) -> Option<Secret>;
         }
     }
 

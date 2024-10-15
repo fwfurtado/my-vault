@@ -1,4 +1,4 @@
-#[derive(Debug, Clone)]
+#[derive(PartialEq, Debug, Clone)]
 pub struct User {
     id: Option<i32>,
     username: String,

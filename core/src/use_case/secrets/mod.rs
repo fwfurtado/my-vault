@@ -3,10 +3,11 @@ use crate::gateway::KeyGateway;
 use std::sync::Arc;
 
 mod create;
+mod show;
 
 #[derive(Debug, PartialEq)]
 pub enum SecretError {
-    NotFoundUrl,
+    SecretNotFound,
     UserNotFound,
 }
 

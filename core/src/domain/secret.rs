@@ -1,6 +1,6 @@
 use crate::domain::Key;
 
-#[derive(Clone)]
+#[derive(PartialEq, Debug, Clone)]
 pub struct Secret {
     id: Option<i32>,
     url: String,
@@ -16,6 +16,17 @@ impl Into<database::entities::Secret> for Secret {
             self.value,
             self.key.clone().into(),
         )
+    }
+}
+
+impl From<database::entities::Secret> for Secret {
+    fn from(secret: database::entities::Secret) -> Self {
+        Secret {
+            id: Some(secret.id()),
+            url: secret.url().to_string(),
+            value: secret.encrypted_value().clone(),
+            key: Key::from(secret.key_id()),
+        }
     }
 }
 
